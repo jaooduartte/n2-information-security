@@ -31,7 +31,7 @@ Esta API foi desenvolvida como parte do projeto N2 de Segurança da Informação
 Primeiramente, clone o repositório do projeto:
 
 ```bash
-git clone https://github.com/seu-usuario/n2-information-security.git
+git clone https://github.com/jaooduartte/n2-information-security.git
 ```
 
 ### 2. Instale as dependências
