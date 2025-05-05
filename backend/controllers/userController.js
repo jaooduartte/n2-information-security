@@ -1,10 +1,13 @@
 const connection = require('../config/db');
+const { sanitizeSQLValue } = require('../utils');
 
 exports.createUser = (req, res) => {
   const { name, email } = req.body;
   const query = 'INSERT INTO users (name, email) VALUES (?, ?)';
+  const sanitizedName = sanitizeSQLValue(name);
+  const sanitizedEmail = sanitizeSQLValue(email);
 
-  connection.query(query, [name, email], (err, result) => {
+  connection.query(query, [sanitizedName, sanitizedEmail], (err, result) => {
     if (err) {
       console.error('Erro ao inserir usuário:', err);
       return res.status(500).send('Erro ao criar usuário');
@@ -27,8 +30,9 @@ exports.getAllUsers = (req, res) => {
 
 exports.getUserById = (req, res) => {
   const query = 'SELECT * FROM users WHERE id = ?';
+  const sanitizedId = sanitizeSQLValue(req.params.id);
   
-  connection.query(query, [req.params.id], (err, results) => {
+  connection.query(query, [sanitizedId], (err, results) => {
     if (err) {
       console.error('Erro ao buscar usuário:', err);
       return res.status(500).send('Erro ao buscar usuário');
@@ -42,9 +46,12 @@ exports.getUserById = (req, res) => {
 
 exports.updateUser = (req, res) => {
   const { name, email } = req.body;
+  const sanitizedName = sanitizeSQLValue(name);
+  const sanitizedEmail = sanitizeSQLValue(email);
+  const sanitizedId = sanitizeSQLValue(req.params.id);
   const query = 'UPDATE users SET name = ?, email = ? WHERE id = ?';
   
-  connection.query(query, [name, email, req.params.id], (err, result) => {
+  connection.query(query, [sanitizedName, sanitizedEmail, sanitizedId], (err, result) => {
     if (err) {
       console.error('Erro ao atualizar usuário:', err);
       return res.status(500).send('Erro ao atualizar usuário');
@@ -58,8 +65,9 @@ exports.updateUser = (req, res) => {
 
 exports.deleteUser = (req, res) => {
   const query = 'DELETE FROM users WHERE id = ?';
+  const sanitizedId = sanitizeSQLValue(req.params.id);
   
-  connection.query(query, [req.params.id], (err, result) => {
+  connection.query(query, [sanitizedId], (err, result) => {
     if (err) {
       console.error('Erro ao deletar usuário:', err);
       return res.status(500).send('Erro ao deletar usuário');
