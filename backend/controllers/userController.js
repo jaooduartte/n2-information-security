@@ -2,9 +2,9 @@ const connection = require('../config/db');
 
 exports.createUser = (req, res) => {
   const { name, email } = req.body;
-  const query = 'INSERT INTO users (name, email) VALUES (?, ?)';
+  const query = `INSERT INTO users (name, email) VALUES ('${name}', '${email}')`;
 
-  connection.query(query, [name, email], (err, result) => {
+  connection.query(query, (err, result) => {
     if (err) {
       console.error('Erro ao inserir usuário:', err);
       return res.status(500).send('Erro ao criar usuário');
@@ -26,9 +26,9 @@ exports.getAllUsers = (req, res) => {
 };
 
 exports.getUserById = (req, res) => {
-  const query = 'SELECT * FROM users WHERE id = ?';
-  
-  connection.query(query, [req.params.id], (err, results) => {
+  const query = `SELECT * FROM users WHERE id = ${req.params.id}`;
+
+  connection.query(query, (err, results) => {
     if (err) {
       console.error('Erro ao buscar usuário:', err);
       return res.status(500).send('Erro ao buscar usuário');
@@ -42,9 +42,9 @@ exports.getUserById = (req, res) => {
 
 exports.updateUser = (req, res) => {
   const { name, email } = req.body;
-  const query = 'UPDATE users SET name = ?, email = ? WHERE id = ?';
+  const query = `UPDATE users SET name = '${name}', email = '${email}' WHERE id = ${req.params.id}`;
   
-  connection.query(query, [name, email, req.params.id], (err, result) => {
+  connection.query(query, (err, result) => {
     if (err) {
       console.error('Erro ao atualizar usuário:', err);
       return res.status(500).send('Erro ao atualizar usuário');
@@ -57,9 +57,9 @@ exports.updateUser = (req, res) => {
 };
 
 exports.deleteUser = (req, res) => {
-  const query = 'DELETE FROM users WHERE id = ?';
+  const query = `DELETE FROM users WHERE id = ${req.params.id}`;
   
-  connection.query(query, [req.params.id], (err, result) => {
+  connection.query(query, (err, result) => {
     if (err) {
       console.error('Erro ao deletar usuário:', err);
       return res.status(500).send('Erro ao deletar usuário');
